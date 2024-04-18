@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import '../models/day.dart';
+import '../models/regist.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -12,7 +12,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  var day = Day(0, DateTime.now());
+  var regist = Regist(waterDrunk: 0);
 
   late AnimationController progressCircleController;
 
@@ -71,7 +71,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 "Nao podes beber ${_inputFieldController.text} Marianaaaa");
           } else {
             //when is pressed add watter drunk
-            day.addWater(int.parse(_inputFieldController.text));
+            regist.addWater(int.parse(_inputFieldController.text));
           }
           //clear input box
           _inputFieldController.clear();
@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       );
 
   Widget progressCircle() {
-    var percentage = day.progressValue();
+    var percentage = regist.progressValue();
 
     if (percentage > 1.0) {
       percentage = 1.0;
@@ -110,7 +110,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       animation: true,
       percent: percentage,
       center: Text(
-        "${(day.progressValue() * 100).toStringAsFixed(1)}%",
+        "${(regist.progressValue() * 100).toStringAsFixed(1)}%",
         style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
       ),
       progressColor: Colors.blue,
