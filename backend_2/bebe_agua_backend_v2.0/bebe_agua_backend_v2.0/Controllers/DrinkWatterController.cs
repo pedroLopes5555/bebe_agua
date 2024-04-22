@@ -1,5 +1,6 @@
 ﻿using bebe_agua_backend.Interfaces;
 using bebe_agua_backend.Models;
+using bebe_agua_backend_v2._0.Models.JsonContents;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bebe_agua_backend.Controllers
@@ -23,11 +24,22 @@ namespace bebe_agua_backend.Controllers
             return Json(regists);
         }
 
+        public IActionResult SaveRegist([FromBody] SaveRegistJsonContent content) 
+        {
+            _registRepository.saveRegist(content)
+            return Ok();
+        }
+
+        public IActionResult getDayWatterDrunk() { return View(); }
+
 
 
         public IActionResult test()
         {
-            return Ok();
+            var test = new SaveRegistJsonContent();
+            test.waterDrunk = 10;
+            test.Date = DateTime.Now;
+            return Json(test);
         }
 
     }
