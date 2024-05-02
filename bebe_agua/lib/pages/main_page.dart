@@ -21,12 +21,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Text(
           "Bebe água :)",
         ),
       ),
-      body: Column(
+      body: Expanded(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           progressCircle(),
@@ -34,7 +35,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           Expanded(child:buildButton(), )
 
         ],
-      ),
+      ),),
     );
   }
 
