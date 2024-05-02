@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 import '../models/regist.dart';
 
 class MainPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  var regist = Regist(waterDrunk: 0);
+
 
   late AnimationController progressCircleController;
 
@@ -20,6 +21,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   final _inputFieldController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
+    var regist = context.read<Regist>();
     return Scaffold(
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
@@ -30,16 +33,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       body: Expanded(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          progressCircle(),
+          progressCircle(regist),
           inputWatterDrunk(),
-          Expanded(child:buildButton(), )
+          ElevatedButton(onPressed: (){
+            
+          }, child: child)
+          Expanded(child:buildButton(regist), )
 
         ],
       ),),
     );
   }
 
-  Widget buildButton() {
+  Widget buildButton(Regist regist) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Expanded(
@@ -48,7 +54,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              drinkButton(),
+              drinkButton(regist),
             ],
           ),
         ),
@@ -58,8 +64,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   }
 
+//text field to input the watter drunk
+
 //drink button
-  Widget drinkButton() => ElevatedButton(
+  Widget drinkButton(Regist regist) => ElevatedButton(
       onPressed: () {
         setState(() {
           var watterDrunk = int.tryParse(_inputFieldController.text);
@@ -82,7 +90,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       ),
       child: const Text("Bebe Agua"));
 
-//text field to input the watter drunk
+
+
   Widget inputWatterDrunk() => Container(
     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
     child: TextFormField(
@@ -103,7 +112,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
 
 
-  Widget progressCircle() {
+  Widget progressCircle(Regist regist) {
     var percentage = regist.progressValue();
 
     if (percentage > 1.0) {
