@@ -1,13 +1,11 @@
+import 'package:bebe_agua/repository/regists_repository.dart';
 import 'package:flutter/cupertino.dart';
 
-class HistoyPage extends StatefulWidget {
-  const HistoyPage({super.key});
+class HistoryPage extends StatelessWidget {
+  const HistoryPage({super.key});
 
-  @override
-  State<HistoyPage> createState() => _HistoyPageState();
-}
+  //List<Regist> regists = RegistRepository(client: client)
 
-class _HistoyPageState extends State<HistoyPage> {
   @override
   Widget build(BuildContext context) {
     return const Expanded(child: Text("Pagina de Historico"));

@@ -22,7 +22,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   static const List<Widget> _widgetPageOptions = <Widget>[
     DrinkWaterPage(),
-    HistoyPage(),
+    HistoryPage(),
   ];
 
   void _onMenuClick(int index) {

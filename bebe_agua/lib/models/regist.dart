@@ -9,12 +9,16 @@ class Regist {
   DateTime? date;
   double meta = 92.0;
 
+
+  Regist.test(this.waterDrunk, this.date);
+
   Regist(int? waterDrunk){
     if (waterDrunk == null){
       this.waterDrunk = 0;
     }else{
       this.waterDrunk = waterDrunk;
     }
+    this.date = null;
   }
 
 
