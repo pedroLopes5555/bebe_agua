@@ -44,10 +44,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   drinkButton(),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  drinkButton()
                 ],
               ),
             ),
