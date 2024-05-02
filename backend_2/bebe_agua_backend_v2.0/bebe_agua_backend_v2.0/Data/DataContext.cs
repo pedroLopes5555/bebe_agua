@@ -20,7 +20,8 @@ namespace bebe_agua_backend.Data
         {
 
             optionsBuilder.EnableSensitiveDataLogging();
-            object value = optionsBuilder.UseSqlServer("Server=localhost,1433;Database=drinkWatter;User=sa;Password=l1n0x3Me#da;TrustServerCertificate=True;");
+            object value = optionsBuilder.UseSqlServer("Server=192.168.1.86,1433;Database=drinkWatter;User=sa;Password=l1n0x3Me#da;TrustServerCertificate=True;");
+            //object value = optionsBuilder.UseSqlServer("Server=192.168.1.86,1433;Database=drinkWatter;User=sa;Password=l1n0x3Me#da;TrustServerCertificate=True;");
 
         }
     }

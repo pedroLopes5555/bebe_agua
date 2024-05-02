@@ -12,7 +12,7 @@ class RegistRepository{
   RegistRepository({required HttpClient client}) : _client = client;
 
   Future<List<Regist>> getRegists() async {
-    final response = await _client.get(url: 'https://127.0.0.1:7044/DrinkWatter/GetAllRegists');
+    final response = await _client.get(url: 'http://192.168.1.86:8000/DrinkWatter/GetAllRegists');
 
     if (response.statusCode == 200)
     {

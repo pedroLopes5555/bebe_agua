@@ -15,16 +15,20 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   List<Regist> regists = [];
 
+  @override
+  void initState() {
+    super.initState();
+    final repository = context.read<RegistRepository>();
+    loadRegists(repository);
+  }
 
 
   @override
   Widget build(BuildContext context) {
     final repository = context.read<RegistRepository>();
 
-    loadRegists(repository);
-
     return Column(
-        children: [regists.isEmpty ? Text("a cerregar data") : buildRegistsList()]);
+        children: [buildRegistsList()]);
   }
 
   Widget buildRegistsList() {

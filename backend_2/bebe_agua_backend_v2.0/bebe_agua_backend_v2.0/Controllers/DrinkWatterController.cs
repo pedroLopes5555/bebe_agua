@@ -26,7 +26,7 @@ namespace bebe_agua_backend.Controllers
 
         public IActionResult SaveRegist([FromBody] SaveRegistJsonContent content) 
         {
-            _registRepository.saveRegist(content)
+            _registRepository.saveRegist(content);
             return Ok();
         }
 
