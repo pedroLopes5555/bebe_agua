@@ -22,8 +22,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
+    return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           progressCircle(),
@@ -32,8 +31,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
             child: buildButton(),
           )
         ],
-      ),
-    );
+      );
   }
 
 

@@ -2,11 +2,17 @@ import 'dart:io';
 
 import 'package:bebe_agua/models/regist.dart';
 import 'package:bebe_agua/pages/splash_screen.dart';
+import 'package:bebe_agua/repository/regists_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'http/http_client.dart';
 
 void main() {
-  runApp(MainApp());
+
+  runApp(Provider(
+      create: (_) => RegistRepository(client: HttpClient()),
+      child: MainApp(),
+  ));
 }
 
 class MainApp extends StatelessWidget {
