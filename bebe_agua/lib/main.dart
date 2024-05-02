@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:bebe_agua/models/regist.dart';
 import 'package:bebe_agua/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
