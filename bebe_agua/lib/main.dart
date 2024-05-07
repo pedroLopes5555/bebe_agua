@@ -15,7 +15,8 @@ void main() {
       create: (_) => RegistRepository(client: HttpClient()),
     ),
     Provider<LOTRDatabse>(create: (_) => LOTRDatabse())
-  ]));
+  ],
+  child: const MainApp(),));
 }
 
 class MainApp extends StatefulWidget {
