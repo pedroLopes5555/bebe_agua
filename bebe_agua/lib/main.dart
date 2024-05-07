@@ -47,11 +47,5 @@ class _MainAppState extends State<MainApp> {
         }
       },
     );
-
-    /*return const MaterialApp(
-      title: 'BEBE ÁGUA',
-      home: SplashScreen(),
-      //home: MainPage(),
-    );*/
   }
 }

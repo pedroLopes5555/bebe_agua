@@ -22,10 +22,10 @@ class RegistRepository{
     }
 
     return[
-      Regist.test(10, DateTime.parse("2022-10-10")),
-      Regist.test(12, DateTime.parse("2022-10-10")),
-      Regist.test(13, DateTime.parse("2022-10-11")),
-      Regist.test(14, DateTime.parse("2022-10-11"))
+      Regist(waterDrunk: 10,date:  DateTime.parse("2022-10-10")),
+      Regist(waterDrunk:  12, date: DateTime.parse("2022-10-10")),
+      Regist(waterDrunk: 13,date: DateTime.parse("2022-10-11")),
+      Regist(waterDrunk: 14,date: DateTime.parse("2022-10-11"))
     ];
   }
 }

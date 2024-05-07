@@ -17,7 +17,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
 
 
   final _inputFieldController = TextEditingController();
-  var regist = new Regist(null);
+  var regist = Regist(waterDrunk: 0, date: DateTime.now());
   
 
   @override
