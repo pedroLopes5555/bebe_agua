@@ -8,10 +8,8 @@ import '../models/regist.dart';
 import 'package:bebe_agua/pages/drink_water_page.dart';
 
 class MainPage extends StatefulWidget {
-
-
-
   const MainPage({super.key});
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -52,5 +50,4 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       ),
     );
   }
-
 }
