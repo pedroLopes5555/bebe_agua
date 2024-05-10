@@ -1,7 +1,7 @@
-import 'package:bebe_agua/repository/regists_repository.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bebe_agua/data/lotr_database.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 import '../models/regist.dart';
 
@@ -14,29 +14,61 @@ class DrinkWaterPage extends StatefulWidget {
 
 class _DrinkWaterPageState extends State<DrinkWaterPage> {
   //controller for the drink button
-
-
   final _inputFieldController = TextEditingController();
-  var regist = Regist(waterDrunk: 0, date: DateTime.now());
+  int _watterDrunkToday = 0;
+
+
   
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          progressCircle(),
-          inputWatterDrunk(),
-          Expanded(
-            child: buildButton(),
-          )
-        ],
-      );
+    final database = context.read<LOTRDatabse>();
+    
+    return FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){
+      if (snapshot.connectionState == ConnectionState.done){
+        _watterDrunkToday = snapshot.data ?? 0;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            progressCircle(),
+            inputWatterDrunk(),
+            Expanded(
+              child: buildButton(),
+            )
+          ],
+        );
+      }
+      else{
+        return CircularProgressIndicator();
+      }
+    });
+
   }
+
+
+  /*
+  *     return FutureBuilder(
+      future: lotrDatabase.init(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return const MaterialApp(
+            title: 'BEBE ÁGUA',
+            home: MainPage(),
+          );
+        } else {
+          return const MaterialApp(
+            title: 'BEBE ÁGUA',
+            home: SplashScreen(),
+          );
+        }
+      },
+    );
+  * */
 
 
   Widget buildButton() {
     return Container(
+      //distance from other elements
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Expanded(
         child: Align(
@@ -44,6 +76,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              //call drink Button
               drinkButton(),
             ],
           ),
@@ -57,25 +90,37 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
   Widget drinkButton() => ElevatedButton(
       onPressed: () {
         setState(() {
-          var watterDrunk = int.tryParse(_inputFieldController.text);
 
+          var watterDrunk = int.tryParse(_inputFieldController.text);
           if (watterDrunk == null) {
             openDialog(
                 "Nao podes beber ${_inputFieldController.text} Marianaaaa");
           } else {
             //when is pressed add watter drunk
-            regist.addWater(int.parse(_inputFieldController.text));
+            //parse it to int
+            _watterDrunkToday ??= 0;
+            _watterDrunkToday += int.tryParse(_inputFieldController.text) ?? 0;
+
+            //create an instance of regist
+            var regist = Regist(waterDrunk: int.parse(_inputFieldController.text), date: DateTime.now());
+            //get the database instance dependency
+            final database = context.read<LOTRDatabse>();
+            //incert the regist on the database
+            database.insertRegist(regist);
           }
           //clear input box
           _inputFieldController.clear();
         });
+
       },
+      //style the elevated button
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.blue,
         textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       ),
       child: const Text("Bebe Agua"));
+
 
   Widget inputWatterDrunk() => Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -93,8 +138,12 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
       );
 
   Widget progressCircle() {
-    var percentage = regist.progressValue();
+    //var percentage = regist.progressValue();
+    //double progressValue() => waterDrunk / meta;
 
+    var percentage = _watterDrunkToday / 93;
+
+    //so the progress bar dont overload
     if (percentage > 1.0) {
       percentage = 1.0;
     }
@@ -108,7 +157,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
         animation: true,
         percent: percentage,
         center: Text(
-          "${(regist.progressValue() * 100).toStringAsFixed(1)}%",
+          "${(percentage * 100).toStringAsFixed(1)}%",
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         progressColor: Colors.blue,

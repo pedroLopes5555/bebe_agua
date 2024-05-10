@@ -15,7 +15,9 @@ class Regist {
   }
 
   Map<String, dynamic> toDB() {
-    return {'WaterDrunk': waterDrunk, 'date': date};
+    // Format the date using ISO 8601 format
+    String? formattedDate = date?.toIso8601String();
+    return {'WaterDrunk': waterDrunk, 'Date': formattedDate};
   }
 
   void addWater(int value) => this.waterDrunk += value;
