@@ -28,7 +28,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            progressCircle(),
+            progressCircle(database),
             inputWatterDrunk(),
             Expanded(
               child: buildButton(),
@@ -55,7 +55,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
                 "Nao podes beber ${_inputFieldController.text} Marianaaaa");
           } else {
             //when is pressed add watter drunk
-            _watterDrunkToday += int.tryParse(_inputFieldController.text) ?? 0;
+            //_watterDrunkToday += int.tryParse(_inputFieldController.text) ?? 0;
             //create an instance of regist
             var regist = Regist(waterDrunk: int.parse(_inputFieldController.text), date: DateTime.now());
             //get the database instance dependency
@@ -112,7 +112,23 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
         ),
       );
 
-  Widget progressCircle() {
+
+
+  /*
+  FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){
+  if (snapshot.connectionState == ConnectionState.done){
+  _watterDrunkToday = snapshot.data ?? 0;
+  */
+
+
+
+  Widget progressCircle(LOTRDatabse database) {
+
+    return FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){
+      if (snapshot.connectionState == ConnectionState.done){
+        _watterDrunkToday = snapshot.data ?? 0;
+      }
+    });
     //var percentage = regist.progressValue();
     //double progressValue() => waterDrunk / meta;
 
