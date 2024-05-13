@@ -1,3 +1,4 @@
+import 'package:bebe_agua/models/day.dart';
 import 'package:bebe_agua/models/regist.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -22,25 +23,6 @@ class LOTRDatabse {
       },
       version: 1,
     );
-  }
-
-  Future<void> _insertTestValues(Database db) async {
-    // Create test Regist instances
-    final testRegists = [
-      Regist(waterDrunk: 10, date: DateTime(2024, 5, 1)),
-      Regist(waterDrunk: 20, date: DateTime(2024, 5, 2)),
-      Regist(waterDrunk: 15, date: DateTime(2024, 5, 3)),
-      Regist(waterDrunk: 25, date: DateTime(2024, 5, 4)),
-      Regist(waterDrunk: 30, date: DateTime(2024, 5, 5)),
-    ];
-
-    // Insert test Regist instances into the database
-    for (final regist in testRegists) {
-      await db.insert(
-        'Regist',
-        regist.toDB(),
-      );
-    }
   }
 
   Future<List<Regist>> getAllRegists() async {
@@ -86,7 +68,7 @@ class LOTRDatabse {
         date.month.toString().length == 1 ? "0${date.month}" : "${date.month}";
     String todaydate = "${date.year}-$month-${date.day}%";
 
-    String query = "SELECT * FROM Regist WHERE Date LIKE '$todaydate';";
+    //String query = "SELECT * FROM Regist WHERE Date LIKE '$todaydate';";
     //query, % in the endo to get all the e regists from today
     List<Map<String, dynamic>> list = await _database!
         .rawQuery("SELECT * FROM Regist WHERE Date LIKE '$todaydate';");
@@ -110,4 +92,33 @@ class LOTRDatabse {
     }
     await _database!.insert('Regist', regist.toDB());
   }
+
+  Future<List<Day>> getDays() async {
+    var regists = await getAllRegists();
+    List<Day> result = [];
+
+    // Map to organize regists by date
+    Map<DateTime, List<Regist>> registsByDate = {};
+
+    // Group regists by date
+    for (var regist in regists) {
+      // Extract the date without considering time
+      DateTime date = DateTime(regist.date!.year, regist.date!.month, regist.date!.day);
+
+      // Check if the date is already in the map
+      if (registsByDate.containsKey(date)) {
+        registsByDate[date]!.add(regist);
+      } else {
+        registsByDate[date] = [regist];
+      }
+    }
+
+    // Create Day objects
+    registsByDate.forEach((date, regists) {
+      result.add(Day(regists: regists));
+    });
+
+    return result;
+  }
+
 }

@@ -49,7 +49,7 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
             //when is pressed add watter drunk
             //_watterDrunkToday += int.tryParse(_inputFieldController.text) ?? 0;
             //create an instance of regist
-            var regist = Regist(waterDrunk: int.parse(_inputFieldController.text), date: DateTime.now());
+            var regist = Regist(waterDrunk: double.parse(_inputFieldController.text), date: DateTime.now());
             //get the database instance dependency
             final database = context.read<LOTRDatabse>();
             //incert the regist on the database

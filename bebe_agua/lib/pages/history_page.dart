@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../data/lotr_database.dart';
+import '../models/day.dart';
 import '../models/regist.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -15,55 +16,27 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  List<Regist> regists = [];
-
-
-  @override
-  void initState() {
-    super.initState();
-    _loadRegists();
-  }
-
-
-
-  // Method to refresh the list of regists
-  Future<void> _loadRegists() async {
-    final database = context.read<LOTRDatabse>(); // Get the database instance
-    regists = await database.getAllRegists();
-    setState(() {}); // Update UI
-  }
-
+  List<Day> days = [];
 
   @override
   Widget build(BuildContext context) {
-    final repository = context.read<RegistRepository>();
-    final LOTRDatabse database = context.read<LOTRDatabse>();
-    return Center(
-      child: Column(
-          children:[
-            CircularProgressIndicator()
-          ] ),
-    );
+    var database = context.read<LOTRDatabse>();
+
+    return FutureBuilder(
+        future: database.getDays(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            days = snapshot.data ?? [];
+            return Text("ok");
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
-
-
-  /*
-
-
-  future: lotrDatabase.init(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return const MaterialApp(
-            title: 'BEBE ÁGUA',
-            home: MainPage(),
-          );
-        } else {
-          return const MaterialApp(
-            title: 'BEBE ÁGUA',
-            home: SplashScreen(),
-          );
-        }
-      },
-    );
-   */
 }
+
+/*return FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){
+      if (snapshot.connectionState == ConnectionState.done){
+        _watterDrunkToday = snapshot.data ?? 0;
+        var percentage = _watterDrunkToday / 93;
+*/
