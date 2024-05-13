@@ -14,11 +14,9 @@ class DrinkWaterPage extends StatefulWidget {
 
 class _DrinkWaterPageState extends State<DrinkWaterPage> {
   //controller for the drink button
+
   final _inputFieldController = TextEditingController();
   int _watterDrunkToday = 0;
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -39,31 +37,44 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
         );
       }
       else{
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
     });
 
   }
 
 
-  /*
-  *     return FutureBuilder(
-      future: lotrDatabase.init(),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return const MaterialApp(
-            title: 'BEBE ÁGUA',
-            home: MainPage(),
-          );
-        } else {
-          return const MaterialApp(
-            title: 'BEBE ÁGUA',
-            home: SplashScreen(),
-          );
-        }
+//drink button
+  Widget drinkButton() => ElevatedButton(
+      onPressed: () {
+        setState(() {
+
+          var watterDrunk = int.tryParse(_inputFieldController.text);
+          if (watterDrunk == null) {
+            openDialog(
+                "Nao podes beber ${_inputFieldController.text} Marianaaaa");
+          } else {
+            //when is pressed add watter drunk
+            _watterDrunkToday += int.tryParse(_inputFieldController.text) ?? 0;
+            //create an instance of regist
+            var regist = Regist(waterDrunk: int.parse(_inputFieldController.text), date: DateTime.now());
+            //get the database instance dependency
+            final database = context.read<LOTRDatabse>();
+            //incert the regist on the database
+            database.insertRegist(regist);
+          }
+          //clear input box
+          _inputFieldController.clear();
+        });
+
       },
-    );
-  * */
+      //style the elevated button
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      ),
+      child: const Text("Bebe Agua"));
 
 
   Widget buildButton() {
@@ -84,42 +95,6 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
       ),
     );
   }
-
-
-//drink button
-  Widget drinkButton() => ElevatedButton(
-      onPressed: () {
-        setState(() {
-
-          var watterDrunk = int.tryParse(_inputFieldController.text);
-          if (watterDrunk == null) {
-            openDialog(
-                "Nao podes beber ${_inputFieldController.text} Marianaaaa");
-          } else {
-            //when is pressed add watter drunk
-            //parse it to int
-            _watterDrunkToday ??= 0;
-            _watterDrunkToday += int.tryParse(_inputFieldController.text) ?? 0;
-
-            //create an instance of regist
-            var regist = Regist(waterDrunk: int.parse(_inputFieldController.text), date: DateTime.now());
-            //get the database instance dependency
-            final database = context.read<LOTRDatabse>();
-            //incert the regist on the database
-            database.insertRegist(regist);
-          }
-          //clear input box
-          _inputFieldController.clear();
-        });
-
-      },
-      //style the elevated button
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue,
-        textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      ),
-      child: const Text("Bebe Agua"));
 
 
   Widget inputWatterDrunk() => Container(

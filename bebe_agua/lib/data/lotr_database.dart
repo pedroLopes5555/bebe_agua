@@ -2,9 +2,9 @@ import 'package:bebe_agua/models/regist.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class LOTRDatabse{
-
+class LOTRDatabse {
   Database? _database;
+
   Future<void> init() async {
     _database = await openDatabase(
       join(await getDatabasesPath(), 'lort1.db'),
@@ -18,11 +18,12 @@ class LOTRDatabse{
       ''');
 
         // Insert 5 test values into the database
-        await _insertTestValues(db);
+        //await _insertTestValues(db);
       },
       version: 1,
     );
   }
+
   Future<void> _insertTestValues(Database db) async {
     // Create test Regist instances
     final testRegists = [
@@ -42,70 +43,50 @@ class LOTRDatabse{
     }
   }
 
-
-
-
-
-  Future<List<Regist>> getAllRegists() async{
-    if(_database == null) {
+  Future<List<Regist>> getAllRegists() async {
+    if (_database == null) {
       throw Exception('data base not inivtialized');
     }
     List result = await _database!.rawQuery("SELECT * FROM Regist");
 
-    return result
-        .map((e) => Regist.fromDB(e))
-        .toList();
+    return result.map((e) => Regist.fromDB(e)).toList();
   }
-
-
 
   Future<List<Regist>> getTodayRegists() async {
     if (_database == null) {
       throw Exception('Database not initialized');
     }
 
-    // Get today's date in ISO 8601 format (YYYY-MM-DD)
-    DateTime now = DateTime.now();
-    String formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-
-    List<Map<String, dynamic>> result = await _database!.rawQuery(
-      "SELECT * FROM Regist WHERE Date = ?",
-      [formattedDate],
-    );
+    List<Map<String, dynamic>> result = await _database!
+        .rawQuery("SELECT * FROM Regist WHERE Date = DATE('now');");
 
     return result.map((e) => Regist.fromDB(e)).toList();
   }
-
-
 
   Future<int> getWaterDrunkToday() async {
     if (_database == null) {
       throw Exception('Database not initialized');
     }
 
-    // Get today's date in ISO 8601 format (YYYY-MM-DD)
-    DateTime now = DateTime.now();
-    String formattedDate = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    List<Map<String, dynamic>> list = await _database!
+        .rawQuery("SELECT * FROM Regist WHERE Date = DATE('now');");
 
-    // Execute SQL query to retrieve the sum of water drunk today
-    List<Map<String, dynamic>> result = await _database!.rawQuery(
-      "SELECT SUM(WaterDrunk) AS total FROM Regist WHERE Date = ?",
-      [formattedDate],
-    );
+    int? result = 0;
 
-    // Extract the total water drunk from the result
-    double totalWaterDrunk = result[0]['total'] ?? 0.0;
+    if(list.isEmpty){
+      return 0;
+    }
 
-    return totalWaterDrunk.toInt();
+    return 0;
+    for (Map<String, dynamic> element in list){
+    //  result += element['WaterDrunk'];
+    }
   }
 
-
-
-  Future<void> insertRegist(Regist regist) async{
-    if(_database == null) {
+  Future<void> insertRegist(Regist regist) async {
+    if (_database == null) {
       throw Exception('data base not inivtialized');
     }
     await _database!.insert('Regist', regist.toDB());
   }
-
 }
