@@ -42,7 +42,8 @@ class _MainAppState extends State<MainApp> {
         } else {
           return const MaterialApp(
             title: 'BEBE ÁGUA',
-            home: SplashScreen(),
+            home: Center(child: CircularProgressIndicator(),)
+            //home: SplashScreen(),
           );
         }
       },

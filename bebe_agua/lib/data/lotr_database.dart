@@ -53,34 +53,55 @@ class LOTRDatabse {
   }
 
   Future<List<Regist>> getTodayRegists() async {
+    //id database null trhow excerion
     if (_database == null) {
       throw Exception('Database not initialized');
     }
+    //get date from now
+    var date = DateTime.now();
+    //format to get the string to make the sql query
+    //format month becouse of sql format
+    String month =
+        date.month.toString().length == 1 ? "0${date.month}" : "${date.month}";
+    String todaydate = "${date.year}-$month-${date.day}%";
 
-    List<Map<String, dynamic>> result = await _database!
-        .rawQuery("SELECT * FROM Regist WHERE Date = DATE('now');");
+    //debug variable
+    //String query = "SELECT * FROM Regist WHERE Date LIKE '$todaydate';";
+    //query, % in the endo to get all the e regists from today
+    List<Map<String, dynamic>> list = await _database!
+        .rawQuery("SELECT * FROM Regist WHERE Date LIKE '$todaydate';");
 
-    return result.map((e) => Regist.fromDB(e)).toList();
+    return list.map((e) => Regist.fromDB(e)).toList();
   }
 
   Future<int> getWaterDrunkToday() async {
+    //id database null trhow excerion
     if (_database == null) {
       throw Exception('Database not initialized');
     }
+    //get date from now
+    var date = DateTime.now();
+    //format to get the string to make the sql query
+    String month =
+        date.month.toString().length == 1 ? "0${date.month}" : "${date.month}";
+    String todaydate = "${date.year}-$month-${date.day}%";
 
+    String query = "SELECT * FROM Regist WHERE Date LIKE '$todaydate';";
+    //query, % in the endo to get all the e regists from today
     List<Map<String, dynamic>> list = await _database!
-        .rawQuery("SELECT * FROM Regist WHERE Date = DATE('now');");
+        .rawQuery("SELECT * FROM Regist WHERE Date LIKE '$todaydate';");
 
-    int? result = 0;
-
-    if(list.isEmpty){
+    double result = 0;
+    //if the list is empty there is no regists, no water drunk
+    if (list.isEmpty) {
       return 0;
     }
-
-    return 0;
-    for (Map<String, dynamic> element in list){
-    //  result += element['WaterDrunk'];
+    //calc the water drunk
+    for (Map<String, dynamic> element in list) {
+      result += element['WaterDrunk'];
     }
+    //return
+    return result.toInt();
   }
 
   Future<void> insertRegist(Regist regist) async {
