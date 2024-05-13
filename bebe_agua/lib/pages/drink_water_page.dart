@@ -21,25 +21,17 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
   @override
   Widget build(BuildContext context) {
     final database = context.read<LOTRDatabse>();
-    
-    return FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){
-      if (snapshot.connectionState == ConnectionState.done){
-        _watterDrunkToday = snapshot.data ?? 0;
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            progressCircle(database),
-            inputWatterDrunk(),
-            Expanded(
-              child: buildButton(),
-            )
-          ],
-        );
-      }
-      else{
-        return const CircularProgressIndicator();
-      }
-    });
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        progressCircle(database),
+        inputWatterDrunk(),
+        Expanded(
+          child: buildButton(),
+        )
+      ],
+    );
 
   }
 
@@ -127,36 +119,59 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
     return FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){
       if (snapshot.connectionState == ConnectionState.done){
         _watterDrunkToday = snapshot.data ?? 0;
+        var percentage = _watterDrunkToday / 93;
+
+        //so the progress bar dont overload
+        if (percentage > 1.0) {
+          percentage = 1.0;
+        }
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          alignment: Alignment.center,
+          child: CircularPercentIndicator(
+            radius: 120.0,
+            lineWidth: 40.0,
+            animation: true,
+            percent: percentage,
+            center: Text(
+              "${(percentage * 100).toStringAsFixed(1)}%",
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            progressColor: Colors.blue,
+            backgroundColor: Colors.grey,
+            animateFromLastPercent: true,
+            circularStrokeCap: CircularStrokeCap.round,
+          ),
+        );
+      }else{
+        var percentage = _watterDrunkToday / 93;
+
+        //so the progress bar dont overload
+        if (percentage > 1.0) {
+          percentage = 1.0;
+        }
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          alignment: Alignment.center,
+          child: CircularPercentIndicator(
+            radius: 120.0,
+            lineWidth: 40.0,
+            animation: true,
+            percent: percentage,
+            center: Text(
+              "${(percentage * 100).toStringAsFixed(1)}%",
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            progressColor: Colors.blue,
+            backgroundColor: Colors.grey,
+            animateFromLastPercent: true,
+            circularStrokeCap: CircularStrokeCap.round,
+          ),
+        );
       }
     });
     //var percentage = regist.progressValue();
     //double progressValue() => waterDrunk / meta;
-
-    var percentage = _watterDrunkToday / 93;
-
-    //so the progress bar dont overload
-    if (percentage > 1.0) {
-      percentage = 1.0;
-    }
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      alignment: Alignment.center,
-      child: CircularPercentIndicator(
-        radius: 120.0,
-        lineWidth: 40.0,
-        animation: true,
-        percent: percentage,
-        center: Text(
-          "${(percentage * 100).toStringAsFixed(1)}%",
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
-        progressColor: Colors.blue,
-        backgroundColor: Colors.grey,
-        animateFromLastPercent: true,
-        circularStrokeCap: CircularStrokeCap.round,
-      ),
-    );
   }
 
   Future openDialog(String message) => showDialog(
