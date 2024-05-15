@@ -33,6 +33,17 @@ class _HistoryPageState extends State<HistoryPage> {
           }
         });
   }
+
+/*
+  Widget list(BuildContext contex,List<Day> days) => ListView.separated(
+    padding: const EdgeInsets.all(10),
+    separatorBuilder: (_, index) => const Divider(color: Colors.grey, thickness: 0.5,),
+    itemCount: days.length,
+    itemBuilder: (_,index) => ListTile(title: Text(days[index].),)
+
+  );
+
+*/
 }
 
 /*return FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){

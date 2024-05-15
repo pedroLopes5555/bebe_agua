@@ -4,23 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Regist {
-  double? waterDrunk = 0;
-  DateTime? date;
-  double meta = 92.0;
+  double? _waterDrunk = 0;
+  DateTime? _date;
+  double _meta = 92.0;
 
-  Regist({required this.waterDrunk, this.date});
+  Regist({required double? waterDrunk, DateTime? date})
+      : _waterDrunk = waterDrunk,
+        _date = date;
 
   factory Regist.fromDB(Map<String, dynamic> map) {
-    return Regist(waterDrunk: map['WaterDrunk'], date: DateTime.parse(map['Date']));
+    return Regist(
+        waterDrunk: map['WaterDrunk'], date: DateTime.parse(map['Date']));
   }
 
   Map<String, dynamic> toDB() {
     // Format the date using ISO 8601 format
-    String? formattedDate = date?.toIso8601String();
-    return {'WaterDrunk': waterDrunk, 'Date': formattedDate};
+    String? formattedDate = _date?.toIso8601String();
+    return {'WaterDrunk': _waterDrunk, 'Date': formattedDate};
   }
 
-  //void addWater(int value) => value += this.waterDrunk ?? 0;
+  double? getWaterDrunk() => _waterDrunk;
 
-  //double progressValue() => (waterDrunk ?? 0) / meta;
+  DateTime? getDateTime() => _date;
+
+  double getMeta() => _meta;
+
+//void addWater(int value) => value += this.waterDrunk ?? 0;
+
+//double progressValue() => (waterDrunk ?? 0) / meta;
 }
