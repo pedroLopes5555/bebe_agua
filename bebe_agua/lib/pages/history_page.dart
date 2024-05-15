@@ -27,7 +27,7 @@ class _HistoryPageState extends State<HistoryPage> {
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             days = snapshot.data ?? [];
-            return Text("ok");
+            return Text("ok ok");
           } else {
             return CircularProgressIndicator();
           }
