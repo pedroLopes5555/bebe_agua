@@ -95,30 +95,50 @@ class LOTRDatabse {
 
   Future<List<Day>> getDays() async {
     var regists = await getAllRegists();
+    var debug = _agroupDays(regists);
+    return _agroupDays(regists);
+  }
+
+  bool _isSameDay(DateTime? date1, DateTime? date2) {
+    if (date1 == null || date2 == null) {
+      return false; // If any of the dates is null, they can't be on the same day
+    }
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  List<Day> _agroupDays(List<Regist> regists) {
     List<Day> result = [];
 
-    // Map to organize regists by date
-    Map<DateTime, List<Regist>> registsByDate = {};
+    for (var registsElement in regists) {
+      bool addedToExistingDay = false;
+      DateTime? registsElementDate = registsElement.getDateTime();
 
-    // Group regists by date
-    for (var regist in regists) {
-      // Extract the date without considering time
-      DateTime date = DateTime(regist.date!.year, regist.date!.month, regist.date!.day);
+      if (registsElementDate == null) {
+        continue; // Skip this registsElement if its DateTime is null
+      }
 
-      // Check if the date is already in the map
-      if (registsByDate.containsKey(date)) {
-        registsByDate[date]!.add(regist);
-      } else {
-        registsByDate[date] = [regist];
+      // Check if registsElement can be added to an existing day
+      for (var resultElement in result) {
+        DateTime? firstRegistDate = resultElement.getRegists().first.getDateTime();
+        if (firstRegistDate != null && _isSameDay(registsElementDate, firstRegistDate)) {
+          resultElement.addRegist(registsElement);
+          addedToExistingDay = true;
+          break; // No need to continue checking days
+        }
+      }
+
+      // If not added to an existing day, create a new one
+      if (!addedToExistingDay) {
+        Day day = Day();
+        day.addRegist(registsElement);
+        result.add(day);
       }
     }
 
-    // Create Day objects
-    registsByDate.forEach((date, regists) {
-      result.add(Day(regists: regists));
-    });
-
     return result;
   }
+
 
 }
