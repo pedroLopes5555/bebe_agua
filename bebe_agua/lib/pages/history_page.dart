@@ -1,4 +1,5 @@
-import 'package:bebe_agua/repository/regists_repository.dart';
+import 'package:bebe_agua/data/lotr_api.dart';
+import 'package:bebe_agua/repository/repositoy.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,10 +21,10 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    var database = context.read<LOTRDatabse>();
+    var repository = context.read<Repository>();
 
     return FutureBuilder(
-        future: database.getDays(),
+        future: repository.getDays(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             days = snapshot.data ?? [];

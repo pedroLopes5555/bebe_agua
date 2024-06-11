@@ -1,4 +1,5 @@
 import 'package:bebe_agua/data/lotr_database.dart';
+import 'package:bebe_agua/repository/repositoy.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -15,28 +16,10 @@ class DrinkWaterPage extends StatefulWidget {
 class _DrinkWaterPageState extends State<DrinkWaterPage> {
   //controller for the drink button
 
+//drink button
   final _inputFieldController = TextEditingController();
   int _watterDrunkToday = 0;
 
-  @override
-  Widget build(BuildContext context) {
-    final database = context.read<LOTRDatabse>();
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        progressCircle(database),
-        inputWatterDrunk(),
-        Expanded(
-          child: buildButton(),
-        )
-      ],
-    );
-
-  }
-
-
-//drink button
   Widget drinkButton() => ElevatedButton(
       onPressed: () {
         setState(() {
@@ -51,9 +34,9 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
             //create an instance of regist
             var regist = Regist(waterDrunk: double.parse(_inputFieldController.text), date: DateTime.now());
             //get the database instance dependency
-            final database = context.read<LOTRDatabse>();
+            final repository = context.read<Repository>();
             //incert the regist on the database
-            database.insertRegist(regist);
+            repository.saveRegists(regist);
           }
           //clear input box
           _inputFieldController.clear();
@@ -67,6 +50,24 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       ),
       child: const Text("Bebe Agua"));
+
+
+  @override
+  Widget build(BuildContext context) {
+    final repository = context.read<Repository>();
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        progressCircle(repository),
+        inputWatterDrunk(),
+        Expanded(
+          child: buildButton(),
+        )
+      ],
+    );
+
+  }
 
 
   Widget buildButton() {
@@ -112,11 +113,9 @@ class _DrinkWaterPageState extends State<DrinkWaterPage> {
   _watterDrunkToday = snapshot.data ?? 0;
   */
 
+  Widget progressCircle(Repository  repository) {
 
-
-  Widget progressCircle(LOTRDatabse database) {
-
-    return FutureBuilder(future: database.getWaterDrunkToday(), builder: (_, snapshot){
+    return FutureBuilder(future: repository.getWaterDrunkToday(), builder: (_, snapshot){
       if (snapshot.connectionState == ConnectionState.done){
         _watterDrunkToday = snapshot.data ?? 0;
         var percentage = _watterDrunkToday / 93;
