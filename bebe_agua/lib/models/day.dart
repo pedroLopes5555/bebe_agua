@@ -6,6 +6,8 @@ class Day {
 
   Day();
 
+  DateTime? getDate() => _regists[0].getDateTime();
+
 
   bool isGoalAchived() {
     if(_regists.isEmpty){
