@@ -13,6 +13,7 @@ dependencies:
   percent_indicator: 4.2.3
   provider: ^6.1.1
   sqflite: ^2.3.2
+  flutter_local_notifications: ^17.1.2
 
 dev_dependencies:
   flutter_test:

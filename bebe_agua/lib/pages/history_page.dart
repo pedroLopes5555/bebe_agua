@@ -71,7 +71,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   Text('${day.getDate()?.day.toString().padLeft(2, '0')}/${day.getDate()?.month.toString().padLeft(2, '0')}/${day.getDate()?.year}'),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               day.isGoalAchived() ? const Icon(Icons.heart_broken_outlined) : const Icon(Icons.heart_broken, color: Colors.red,)
             ],
           ),
